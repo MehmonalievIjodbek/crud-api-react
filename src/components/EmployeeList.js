@@ -4,6 +4,7 @@ import {useContext} from "react";
 import {EmployeeContext} from "../context/EmployeeContext";
 import {Alert, Button, Modal} from "react-bootstrap";
 import AddForm from "./AddForm";
+import Pagination from "./Pagination";
 
 
 const EmployeeList = () => {
@@ -17,6 +18,9 @@ const EmployeeList = () => {
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
     //const handleShowAlert = () => setShowAlert(true) ;
+
+    const [currentPage, setCurrentPage] = useState(1)
+    const [employeesPerPage] = useState(2)
 
     const handleShowAlert = () => {
         setShowAlert(true);
@@ -76,6 +80,10 @@ const EmployeeList = () => {
                 }
                 </tbody>
             </table>
+
+            <Pagination>
+
+            </Pagination>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
