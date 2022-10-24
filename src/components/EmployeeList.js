@@ -9,7 +9,7 @@ import Pagination from "./Pagination";
 
 const EmployeeList = () => {
 
-    const {employees} = useContext(EmployeeContext);
+    const {sortedEmployees} = useContext(EmployeeContext);
 
     const [showAlert, setShowAlert] = useState(false)
 
@@ -19,7 +19,7 @@ const EmployeeList = () => {
     const handleClose = () => setShow(false);
     //const handleShowAlert = () => setShowAlert(true) ;
 
-    const [currentPage, setCurrentPage] = useState(1)
+    const [currentPage, setCurrentPage] = useState(1);
     const [employeesPerPage] = useState(2)
 
     const handleShowAlert = () => {
@@ -35,7 +35,17 @@ const EmployeeList = () => {
         return () => {
             handleShowAlert()
         }
-    }, [employees])
+    }, [sortedEmployees]);
+
+
+
+    const indexOfLastEmployee = currentPage * employeesPerPage;
+    const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
+    const currentEmployees = sortedEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
+    const totalPagesNum = Math.ceil(sortedEmployees.length / employeesPerPage);
+
+
+
     return (
         <>
             <div className='table-title'>
@@ -72,7 +82,7 @@ const EmployeeList = () => {
                 </thead>
                 <tbody>
                 {
-                    employees.sort((a,b) => (a.name < b.name ? -1 : 1)).map(employee => (
+                    currentEmployees.map(employee => (
                         <tr key={employee.id}>
                             <Employee employee={employee}/>
                         </tr>
@@ -81,9 +91,7 @@ const EmployeeList = () => {
                 </tbody>
             </table>
 
-            <Pagination>
-
-            </Pagination>
+            <Pagination pages={totalPagesNum} setCurrentPage={setCurrentPage} currentEmployees={currentEmployees} sortedEmployees={sortedEmployees}/>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
